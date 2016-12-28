@@ -15,10 +15,11 @@
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
-      <configuration process_explicitly_annotated="true">
+      <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false">
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml</file>
-          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/applicationContext.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/applicationContext-redis.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/applicationContext-base.xml</file>
         </fileset>
       </configuration>
     </facet>

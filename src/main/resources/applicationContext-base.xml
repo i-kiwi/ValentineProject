@@ -10,8 +10,6 @@
     <context:annotation-config />
 
     <context:component-scan base-package="com.taikang.service" />
+    <!--<context:component-scan base-package="com.taikang.dao" />-->
 
-    <bean id="user" class="com.taikang.dto.User" >
-        <property name="name" value="kiwi" />
-    </bean>
 </beans>
