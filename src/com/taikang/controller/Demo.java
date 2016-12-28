@@ -1,7 +1,9 @@
 package com.taikang.controller;
 
+import com.taikang.dao.RedisBaseDao;
 import com.taikang.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,10 +19,9 @@ public class Demo {
 
     @Autowired
     private User user;
-//    @Autowired
-//    private RedisBaseDao redisBaseDao;
     @Autowired
-    private JedisPoolConfig jedisPoolConfig;
+    private RedisBaseDao redis;
+
 
     @RequestMapping("tt.do")
     @ResponseBody
@@ -29,9 +30,10 @@ public class Demo {
             response.setCharacterEncoding("utf-8");
             response.setContentType("text/json");
             PrintWriter out = response.getWriter();
-            out.print(user.getName());
+            out.print(redis.get("foo"));
             out.flush();
             out.close();
+
         } catch (Exception e){
             e.printStackTrace();
         }
