@@ -25,9 +25,4 @@
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
     </bean>
 
-
-    <bean id="user" class="com.taikang.dto.User" >
-        <property name="name" value="kkk" />
-    </bean>
-
 </beans>
