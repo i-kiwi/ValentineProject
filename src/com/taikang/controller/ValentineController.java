@@ -22,7 +22,7 @@ public class ValentineController {
 
     @Autowired
     private ValentineService valentineService;
-        private Logger log = Logger.getLogger(ValentineController.class);
+    private Logger log = Logger.getLogger(ValentineController.class);
 
     @RequestMapping(value = "getReturnInfo.do", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
@@ -31,9 +31,6 @@ public class ValentineController {
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
 
-        String returnCode = "";
-        String returnMsg = "";
-        String returnItem = "";
         String returnJson = "";
         try {
             String param = request.getParameter("param");
@@ -44,9 +41,7 @@ public class ValentineController {
             returnJson = this.valentineService.getReturnInfo(json);
         } catch (Exception e){
             e.printStackTrace();
-            returnCode = "ERROR";
-            returnMsg = "服务器异常";
-            returnJson = Tools.formatReturnJson(returnCode, returnMsg, returnItem);
+            returnJson = Tools.formatReturnJson("ERROR", "出错了~", "");
         }
         out.print(returnJson);
         out.flush();
