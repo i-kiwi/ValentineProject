@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class Tools {
 
-    public static String formatReturnJson(String returnCode, String returnMsg, String returnItem){
+    public static String formatReturnJson(String returnCode, String returnMsg, Object returnItem){
         JSONObject json = new JSONObject();
         json.put("returnCode",returnCode);
         json.put("returnMsg",returnMsg);
@@ -53,7 +53,7 @@ public class Tools {
                 }
                 break;
         }
-        return baseRate * randomRatio;
+        return baseRate * randomRatio * 100;
     }
 
 }

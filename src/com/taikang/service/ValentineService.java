@@ -79,8 +79,7 @@ public class ValentineService {
             returnCode = "ERROR";
             returnMsg = "出错了~";
         }
-        returnItem = resultJson.toJSONString();
-        return Tools.formatReturnJson(returnCode, returnMsg, returnItem);
+        return Tools.formatReturnJson(returnCode, returnMsg, resultJson);
     }
     //添加基础返回信息
     private void addInfo(JSONObject resultJson, Map<String, Object> map){
@@ -100,7 +99,7 @@ public class ValentineService {
                     }
                 });
                 int index = scoreList.indexOf(score);
-                rank.add(index, map.get(key));
+                rank.add(index, JSONObject.parseObject(""+map.get(key)));
             }
         }
         resultJson.put("rank", rank);
@@ -169,7 +168,7 @@ public class ValentineService {
                     StringUtils.isEmpty(selfOpenId) ||
                     openId.equals(selfOpenId) ||
                     answerArr.size() != 3 ||
-                    StringUtils.hasLength(""+this.redis.hget(ERedis.valentineP_ + openId, ERedis.answer_ + selfOpenId))){
+                    null != this.redis.hget(ERedis.valentineP_ + openId, ERedis.answer_ + selfOpenId)){
                 /*
                     1两个ID不为空
                     2两个ID不相等
@@ -185,11 +184,12 @@ public class ValentineService {
                 double score = Tools.calcScore(theAnswerArr, answerArr);
                 //添加信息到缓存
                 JSONObject answerJson = new JSONObject();
+                answerJson.put("openId", selfOpenId);
                 answerJson.put("name", name);
                 answerJson.put("headImg", headImg);
                 answerJson.put("score", score);
                 answerJson.put("theAnswer", answerArr);
-                this.redis.hset(ERedis.valentineP_ + openId, ERedis.answer_ + selfOpenId, answerJson);
+                this.redis.hset(ERedis.valentineP_ + openId, ERedis.answer_ + selfOpenId, answerJson.toJSONString());
                 //返回排名等信息
                 JSONObject tempJson = new JSONObject();
                 this.addInfo(tempJson, this.redis.hgetAll(ERedis.valentineP_ + openId));
@@ -202,7 +202,6 @@ public class ValentineService {
             returnCode = "ERROR";
             returnMsg = "出错了~";
         }
-        returnItem = resultJson.toJSONString();
-        return Tools.formatReturnJson(returnCode, returnMsg, returnItem);
+        return Tools.formatReturnJson(returnCode, returnMsg, resultJson);
     }
 }
