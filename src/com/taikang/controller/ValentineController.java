@@ -2,6 +2,7 @@ package com.taikang.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.taikang.service.ValentineService;
+import com.taikang.util.HttpRequestUtil;
 import com.taikang.util.Tools;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,10 @@ public class ValentineController {
         try {
             String param = request.getParameter("param");
             // TODO 解密
+            String decryptUrl = Tools.getString("decryptUrl");
+            param = HttpRequestUtil.send(decryptUrl, "POST", param);
+            log.debug("[param]>>>"+param);
+
             JSONObject json = JSONObject.parseObject(param);
             log.info(json.toJSONString());
 
@@ -76,6 +81,10 @@ public class ValentineController {
         try {
             String param = request.getParameter("param");
             // TODO 解密
+            String decryptUrl = Tools.getString("decryptUrl");
+            param = HttpRequestUtil.send(decryptUrl, "POST", param);
+            log.debug("[param]>>>"+param);
+
             JSONObject json = JSONObject.parseObject(param);
             log.info(json.toJSONString());
 
@@ -110,6 +119,10 @@ public class ValentineController {
         try {
             String param = request.getParameter("param");
             // TODO 解密
+            String decryptUrl = Tools.getString("decryptUrl");
+            param = HttpRequestUtil.send(decryptUrl, "POST", param);
+            log.debug("[param]>>>"+param);
+
             JSONObject json = JSONObject.parseObject(param);
             log.info(json.toJSONString());
 
