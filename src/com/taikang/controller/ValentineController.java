@@ -24,9 +24,16 @@ public class ValentineController {
     private ValentineService valentineService;
     private Logger log = Logger.getLogger(ValentineController.class);
 
-    @RequestMapping(value = "getReturnInfo.do", method = {RequestMethod.GET, RequestMethod.POST})
+    /**
+     * 返回跳转页面标记信息
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @RequestMapping(value = "getReturnInfo.do", method = {RequestMethod.POST})
     @ResponseBody
     public void getReturnInfo(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        log.info("---返回跳转页面标记信息----------开始");
         response.setCharacterEncoding("utf-8");
         response.setContentType("text/json");
         PrintWriter out = response.getWriter();
@@ -36,7 +43,7 @@ public class ValentineController {
             String param = request.getParameter("param");
             // TODO 解密
             JSONObject json = JSONObject.parseObject(param);
-            log.debug(json.toJSONString());
+            log.info(json.toJSONString());
 
             returnJson = this.valentineService.getReturnInfo(json);
         } catch (Exception e){
@@ -46,5 +53,77 @@ public class ValentineController {
         out.print(returnJson);
         out.flush();
         out.close();
+        log.info(returnJson);
+        log.info("---返回跳转页面标记信息----------结束");
     }
+
+
+    /**
+     * 出题
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @RequestMapping(value = "setQuestion.do", method = {RequestMethod.POST})
+    @ResponseBody
+    public void setQuestion(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        log.info("---出题----------开始");
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("text/json");
+        PrintWriter out = response.getWriter();
+
+        String returnJson = "";
+        try {
+            String param = request.getParameter("param");
+            // TODO 解密
+            JSONObject json = JSONObject.parseObject(param);
+            log.info(json.toJSONString());
+
+            returnJson = this.valentineService.setQuestion(json);
+        } catch (Exception e){
+            e.printStackTrace();
+            returnJson = Tools.formatReturnJson("ERROR", "出错了~", "");
+        }
+        out.print(returnJson);
+        out.flush();
+        out.close();
+        log.info(returnJson);
+        log.info("---出题----------结束");
+    }
+
+
+    /**
+     * 答题
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @RequestMapping(value = "answerQuestion.do", method = {RequestMethod.POST})
+    @ResponseBody
+    public void answerQuestion(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        log.info("---答题----------开始");
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("text/json");
+        PrintWriter out = response.getWriter();
+
+        String returnJson = "";
+        try {
+            String param = request.getParameter("param");
+            // TODO 解密
+            JSONObject json = JSONObject.parseObject(param);
+            log.info(json.toJSONString());
+
+            returnJson = this.valentineService.answerQuestion(json);
+        } catch (Exception e){
+            e.printStackTrace();
+            returnJson = Tools.formatReturnJson("ERROR", "出错了~", "");
+        }
+        out.print(returnJson);
+        out.flush();
+        out.close();
+        log.info(returnJson);
+        log.info("---答题----------结束");
+    }
+
+
 }

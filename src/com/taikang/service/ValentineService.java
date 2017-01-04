@@ -23,6 +23,11 @@ public class ValentineService {
     private RedisBaseDao redis;
     private Logger log = Logger.getLogger(ValentineService.class);
 
+    /**
+     * 返回跳转页面标记信息
+     * @param json
+     * @return
+     */
     public String getReturnInfo(JSONObject json) {
         String returnCode = "SUCCESS";
         String returnMsg = "获取成功";
@@ -78,7 +83,6 @@ public class ValentineService {
         returnItem = resultJson.toJSONString();
         return Tools.formatReturnJson(returnCode, returnMsg, returnItem);
     }
-
     //添加基础返回信息
     private void addInfo(JSONObject resultJson, Map<String, Object> map){
         resultJson.put("theAnswer", map.get("theAnswer"));
@@ -103,5 +107,104 @@ public class ValentineService {
         resultJson.put("rank", rank);
     }
 
+    /**
+     * 出题
+     * @param json
+     * @return
+     */
+    public String setQuestion(JSONObject json) {
+        String returnCode = "SUCCESS";
+        String returnMsg = "出题成功";
+        String returnItem = "";
+//        JSONObject resultJson = new JSONObject();
 
+        String openId = json.getString("openId");
+        String name = json.getString("name");
+        String headImg = json.getString("headImg");
+        String gender = json.getString("gender");
+        String theAnswer = json.getString("theAnswer");
+
+        try {
+            System.out.println(">>>"+this.redis.hlen(ERedis.valentineP_ + openId));
+            JSONArray theAnswerArr = JSONArray.parseArray(theAnswer);
+            if(theAnswerArr.size() == 3 && this.redis.hlen(ERedis.valentineP_ + openId) == 0){
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("name", name);
+                map.put("headImg", headImg);
+                map.put("gender", gender);
+                map.put("theAnswer", theAnswer);
+                this.redis.hmset(ERedis.valentineP_ + openId, map);
+            }else{
+                returnCode = "FAIL";
+                returnMsg = "出题失败";
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            returnCode = "ERROR";
+            returnMsg = "出错了~";
+        }
+//        returnItem = resultJson.toJSONString();
+        return Tools.formatReturnJson(returnCode, returnMsg, returnItem);
+    }
+
+
+    /**
+     * 答题
+     * @param json
+     * @return
+     */
+    public String answerQuestion(JSONObject json) {
+        String returnCode = "SUCCESS";
+        String returnMsg = "答题成功";
+        String returnItem = "";
+        JSONObject resultJson = new JSONObject();
+
+        String openId = json.getString("openId");
+        String selfOpenId = json.getString("selfOpenId");
+        String name = json.getString("name");
+        String headImg = json.getString("headImg");
+        String theAnswer = json.getString("theAnswer");
+        //回答答案
+        JSONArray answerArr = JSONArray.parseArray(theAnswer);
+        try {
+            if(StringUtils.isEmpty(openId) ||
+                    StringUtils.isEmpty(selfOpenId) ||
+                    openId.equals(selfOpenId) ||
+                    answerArr.size() != 3 ||
+                    StringUtils.hasLength(""+this.redis.hget(ERedis.valentineP_ + openId, ERedis.answer_ + selfOpenId))){
+                /*
+                    1两个ID不为空
+                    2两个ID不相等
+                    3回答个数等于三
+                    4没有回答过该用户的题
+                 */
+                returnCode = "FAIL";
+                returnMsg = "答题失败";
+            } else {
+                //正确答案
+                JSONArray theAnswerArr = JSONArray.parseArray(""+this.redis.hget(ERedis.valentineP_ + openId, "theAnswer"));
+                //默契度
+                double score = Tools.calcScore(theAnswerArr, answerArr);
+                //添加信息到缓存
+                JSONObject answerJson = new JSONObject();
+                answerJson.put("name", name);
+                answerJson.put("headImg", headImg);
+                answerJson.put("score", score);
+                answerJson.put("theAnswer", answerArr);
+                this.redis.hset(ERedis.valentineP_ + openId, ERedis.answer_ + selfOpenId, answerJson);
+                //返回排名等信息
+                JSONObject tempJson = new JSONObject();
+                this.addInfo(tempJson, this.redis.hgetAll(ERedis.valentineP_ + openId));
+                resultJson.put("socre", score);
+                resultJson.put("rank", tempJson.getJSONArray("rank"));
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+            returnCode = "ERROR";
+            returnMsg = "出错了~";
+        }
+        returnItem = resultJson.toJSONString();
+        return Tools.formatReturnJson(returnCode, returnMsg, returnItem);
+    }
 }
