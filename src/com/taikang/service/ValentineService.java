@@ -79,7 +79,6 @@ public class ValentineService {
             returnCode = "ERROR";
             returnMsg = "出错了~";
         }
-        log.debug("[resultJson] >>> " + resultJson.toJSONString());
         returnItem = resultJson.toJSONString();
         return Tools.formatReturnJson(returnCode, returnMsg, returnItem);
     }
@@ -125,7 +124,6 @@ public class ValentineService {
         String theAnswer = json.getString("theAnswer");
 
         try {
-            System.out.println(">>>"+this.redis.hlen(ERedis.valentineP_ + openId));
             JSONArray theAnswerArr = JSONArray.parseArray(theAnswer);
             if(theAnswerArr.size() == 3 && this.redis.hlen(ERedis.valentineP_ + openId) == 0){
                 Map<String, Object> map = new HashMap<String, Object>();
