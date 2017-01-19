@@ -23,6 +23,7 @@ public class ValentineService {
     private RedisBaseDao redis;
     private Logger log = Logger.getLogger(ValentineService.class);
 
+
     /**
      * 返回跳转页面标记信息
      * @param json
@@ -40,6 +41,10 @@ public class ValentineService {
         String selfOpenId = json.getString("selfOpenId");
 
         try {
+            if(StringUtils.isEmpty(selfOpenId)){
+                log.debug("selfOpenId is empty!");
+                throw new Exception();
+            }
             //若出题人ID不为空，并且出过题则标记为true
             Map<String, Object> map = null;
             boolean linkFlag = StringUtils.hasLength(openId) &&
@@ -83,7 +88,8 @@ public class ValentineService {
     }
     //添加基础返回信息
     private void addInfo(JSONObject resultJson, Map<String, Object> map){
-        resultJson.put("theAnswer", map.get("theAnswer"));
+        log.info(map.get("theAnswer"));
+        resultJson.put("theAnswer", null != map.get("theAnswer") ? JSONArray.parseArray(""+map.get("theAnswer")) : "");
         resultJson.put("name", map.get("name"));
         resultJson.put("gender", map.get("gender"));
         resultJson.put("headImg", map.get("headImg"));
@@ -123,6 +129,11 @@ public class ValentineService {
         String theAnswer = json.getString("theAnswer");
 
         try {
+            if(StringUtils.isEmpty(openId) || StringUtils.isEmpty(name) || StringUtils.isEmpty(headImg) ||
+                    StringUtils.isEmpty(gender) || StringUtils.isEmpty(theAnswer)){
+                log.debug("param is empty!");
+                throw new Exception();
+            }
             JSONArray theAnswerArr = JSONArray.parseArray(theAnswer);
             if(theAnswerArr.size() == 3 && this.redis.hlen(ERedis.valentineP_ + openId) == 0){
                 Map<String, Object> map = new HashMap<String, Object>();
@@ -164,10 +175,12 @@ public class ValentineService {
         //回答答案
         JSONArray answerArr = JSONArray.parseArray(theAnswer);
         try {
-            if(StringUtils.isEmpty(openId) ||
-                    StringUtils.isEmpty(selfOpenId) ||
-                    openId.equals(selfOpenId) ||
-                    answerArr.size() != 3 ||
+            if(StringUtils.isEmpty(openId) || StringUtils.isEmpty(name) || StringUtils.isEmpty(headImg) ||
+                    StringUtils.isEmpty(selfOpenId) || StringUtils.isEmpty(theAnswer)){
+                log.debug("param is empty!");
+                throw new Exception();
+            }
+            if(answerArr.size() != 3 ||
                     null != this.redis.hget(ERedis.valentineP_ + openId, ERedis.answer_ + selfOpenId)){
                 /*
                     1两个ID不为空
@@ -193,7 +206,7 @@ public class ValentineService {
                 //返回排名等信息
                 JSONObject tempJson = new JSONObject();
                 this.addInfo(tempJson, this.redis.hgetAll(ERedis.valentineP_ + openId));
-                resultJson.put("socre", score);
+                resultJson.put("score", score);
                 resultJson.put("rank", tempJson.getJSONArray("rank"));
             }
 

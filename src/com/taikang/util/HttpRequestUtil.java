@@ -24,7 +24,7 @@ public class HttpRequestUtil {
                     .openConnection();
             connection.setDoOutput(true);
             connection.setRequestMethod(method);
-            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Content-Type", "text/plain");
             connection.setRequestProperty("Accept-Charset", "utf-8");
 
             OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
