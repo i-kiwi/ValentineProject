@@ -18,6 +18,8 @@ public class Tools {
 
     private static Logger log = Logger.getLogger(Tools.class);
 
+    private static Random random = new Random();
+
     public static String formatReturnJson(String returnCode, String returnMsg, Object returnItem){
         JSONObject json = new JSONObject();
         json.put("returnCode",returnCode);
@@ -28,7 +30,7 @@ public class Tools {
 
     /**
      * 默契度计算
-     * 默契度=基础默契度*随机系数n(0.9 <= n <= 1.2)
+     * 默契度=基础默契度*随机系数n(1.0 <= n <= 1.2)
      * @param theAnswerArr
      * @param answerArr
      * @return
@@ -40,8 +42,8 @@ public class Tools {
         int rightCount = theAnswerArr.size();
         //基础比率
         double baseRate = 0;
-        //随机系数(0.9 >= n >= 1.2)
-        double randomRatio = (new Random().nextInt(12 + 1 - 9) + 9) / 10.0;
+        //随机系数(1.0 >= n >= 1.2)
+        double randomRatio = (random.nextInt(12 + 1 - 10) + 10) / 10.0;
         switch (rightCount){
             case 0:
                 baseRate = 0.35;
