@@ -66,25 +66,29 @@ public class Tools {
         return baseRate * randomRatio * 100;
     }
 
-    /**
-     * 读取配置文件
-     * @param key
-     * @return
-     */
-    public static String getString(String key){
-        InputStream in = Tools.class.getClassLoader().getResourceAsStream("conf.properties");
-        Properties p = new Properties();
-        try {
-            p.load(in);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return p.getProperty(key);
+    public static void main(String[] args) {
+        System.out.println(PropertyUtil.getConstants("decryptUrl"));
     }
+
+//    /**
+//     * 读取配置文件
+//     * @param key
+//     * @return
+//     */
+//    public static String getString(String key){
+//        InputStream in = Tools.class.getClassLoader().getResourceAsStream("conf.properties");
+//        Properties p = new Properties();
+//        try {
+//            p.load(in);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return p.getProperty(key);
+//    }
 
     public static JSONObject decryptParam(HttpServletRequest request){
         JSONObject json = new JSONObject();
-        String decryptUrl = getString("decryptUrl");
+        String decryptUrl = PropertyUtil.getConstants("decryptUrl");
         Enumeration<String> names = request.getParameterNames();
         while(null != names && names.hasMoreElements()){
 //            JSONObject paramJson = JSON.parseObject(names.nextElement());
@@ -100,6 +104,9 @@ public class Tools {
                 }
                 continue;
             }
+//            if(name.equals("openId") || name.equals("selfOpenId")){
+//                continue;
+//            }
             json.put(name, value);
         }
         return json;

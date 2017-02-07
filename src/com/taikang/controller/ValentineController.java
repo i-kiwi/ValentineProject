@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.taikang.dao.RedisBaseDao;
 import com.taikang.service.ValentineService;
 import com.taikang.util.HttpRequestUtil;
+import com.taikang.util.PropertyUtil;
 import com.taikang.util.Tools;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,10 @@ public class ValentineController {
     @ResponseBody
     public void test(HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.info("---测试----------开始");
-        log.info(redis.get("foo"));
-        redis.set("foo","bar");
+//        log.info(redis.get("foo"));
+//        redis.set("foo","bar");
+        System.out.println(PropertyUtil.getConstants("decryptUrl"));
+
         log.info("---测试----------结束");
     }
     /**
