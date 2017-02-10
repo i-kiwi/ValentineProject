@@ -129,7 +129,7 @@ public class ValentineService {
         String theAnswer = json.getString("theAnswer");
 
         try {
-            if(StringUtils.isEmpty(openId) || StringUtils.isEmpty(name) || StringUtils.isEmpty(headImg) ||
+            if(StringUtils.isEmpty(openId) || StringUtils.isEmpty(name) ||
                     StringUtils.isEmpty(gender) || StringUtils.isEmpty(theAnswer)){
                 log.debug("param is empty!");
                 throw new Exception();
@@ -175,7 +175,7 @@ public class ValentineService {
         //回答答案
         JSONArray answerArr = JSONArray.parseArray(theAnswer);
         try {
-            if(StringUtils.isEmpty(openId) || StringUtils.isEmpty(name) || StringUtils.isEmpty(headImg) ||
+            if(StringUtils.isEmpty(openId) || StringUtils.isEmpty(name) ||
                     StringUtils.isEmpty(selfOpenId) || StringUtils.isEmpty(theAnswer)){
                 log.debug("param is empty!");
                 throw new Exception();

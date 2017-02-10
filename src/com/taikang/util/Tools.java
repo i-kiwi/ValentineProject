@@ -55,12 +55,7 @@ public class Tools {
                 baseRate = 0.65;
                 break;
             case 3:
-//                if(new Random().nextBoolean()){
-//                    baseRate = 1;
-//                    randomRatio = 1;
-//                }else{
-                    baseRate = 0.83;
-//                }
+                baseRate = 0.83;
                 break;
         }
         return baseRate * randomRatio * 100;
@@ -70,21 +65,6 @@ public class Tools {
         System.out.println(PropertyUtil.getConstants("decryptUrl"));
     }
 
-//    /**
-//     * 读取配置文件
-//     * @param key
-//     * @return
-//     */
-//    public static String getString(String key){
-//        InputStream in = Tools.class.getClassLoader().getResourceAsStream("conf.properties");
-//        Properties p = new Properties();
-//        try {
-//            p.load(in);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//        return p.getProperty(key);
-//    }
 
     public static JSONObject decryptParam(HttpServletRequest request){
         JSONObject json = new JSONObject();
@@ -104,9 +84,9 @@ public class Tools {
                 }
                 continue;
             }
-//            if(name.equals("openId") || name.equals("selfOpenId")){
-//                continue;
-//            }
+            if(name.equals("openId") || name.equals("selfOpenId")){
+                continue;
+            }
             json.put(name, value);
         }
         return json;
