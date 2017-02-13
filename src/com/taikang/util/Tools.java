@@ -61,11 +61,6 @@ public class Tools {
         return baseRate * randomRatio * 100;
     }
 
-    public static void main(String[] args) {
-        System.out.println(PropertyUtil.getConstants("decryptUrl"));
-    }
-
-
     public static JSONObject decryptParam(HttpServletRequest request){
         JSONObject json = new JSONObject();
         String decryptUrl = PropertyUtil.getConstants("decryptUrl");
